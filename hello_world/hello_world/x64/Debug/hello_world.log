@@ -1,0 +1,2 @@
+﻿  test.cpp
+D:\VS 2022\GitHub_repository\CPP_CODE\hello_world\hello_world\test.cpp(12): error C4700: 使用了未初始化的局部变量“a”
