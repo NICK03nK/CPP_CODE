@@ -74,7 +74,6 @@ public:
 		return *this;
 	}
 
-
 	// 日期+天数
 	Date operator+(int day)
 	{
@@ -85,38 +84,36 @@ public:
 		return ret;
 	}
 
+	// 日期-天数
+	Date operator-(int day)
+	{
+		Date ret(*this);
 
-	//// 日期-天数
-	//Date operator-(int day);
+		ret -= day;
 
+		return ret;
+	}
 
-	//// 日期-=天数
-	//Date& operator-=(int day)
-	//{
-	//	_day -= day;
+	// 日期-=天数
+	Date& operator-=(int day)
+	{
+		_day -= day;
 
-	//	while (_day <= 0)
-	//	{
-	//		if (_month == 0)
-	//		{
-	//			_year--;
-	//			_month = 12;
-	//		}
-	//		else
-	//		{
-	//			_month--;
-	//			_day = GetMonthDay(_year, _month - 1) + _day;
+		while (_day < 0)
+		{
+			_month--;
 
-	//			if (_day == 0)
-	//			{
-	//				_day = GetMonthDay(_year, _month);
-	//			}
-	//		}
-	//	}
+			if (_month == 0)
+			{
+				_year--;
+				_month = 12;
+			}
 
-	//	return *this;
-	//}
+			_day += GetMonthDay(_year, _month);
+		}
 
+		return *this;
+	}
 
 	// 前置++
 	Date& operator++()
@@ -138,7 +135,6 @@ public:
 		return *this;
 	}
 
-
 	// 后置++
 	Date operator++(int)
 	{
@@ -149,7 +145,6 @@ public:
 		return ret;
 	}
 
-
 	// 后置--
 	Date operator--(int)
 	{
@@ -159,7 +154,6 @@ public:
 
 		return ret;
 	}
-
 
 	// 前置--
 	Date& operator--()
@@ -189,7 +183,6 @@ public:
 		return *this;
 	}
 
-
 	// >运算符重载
 	bool operator>(const Date& d)
 	{
@@ -211,20 +204,17 @@ public:
 		}
 	}
 
-
 	// ==运算符重载
 	bool operator==(const Date& d)
 	{
 		return _year == d._year && _month == d._month && _day == d._day;
 	}
 
-
 	// >=运算符重载
 	bool operator>=(const Date& d)
 	{
 		return *this > d || *this == d;
 	}
-
 
 	// <运算符重载
 	bool operator<(const Date& d)
@@ -247,13 +237,11 @@ public:
 		}
 	}
 
-
 	// <=运算符重载
 	bool operator<=(const Date& d)
 	{
 		return *this < d || *this == d;
 	}
-
 
 	// !=运算符重载
 	bool operator!=(const Date& d)
@@ -261,13 +249,29 @@ public:
 		return _year != d._year && _month != d._month && _day != d._day;
 	}
 
-
 	// 日期-日期 返回天数
 	int operator-(const Date& d)
 	{
+		Date earlier(*this);
+		Date later(d);
+		if (earlier > later)
+		{
+			Date tmp = earlier;
+			earlier = later;
+			later = tmp;
+		}
 
+		int i = 0;
+		for (i = 0;; i++)
+		{
+			if (earlier + i == later)
+			{
+				break;
+			}
+		}
+
+		return i;
 	}
-
 
 private:
 	int _year;
@@ -308,6 +312,13 @@ int main()
 	//flag = d9 == d1;
 
 	flag = d9 >= d1;
+
+	Date d10(2022, 9, 26);
+	d9 = d10 - 513;
+
+	Date d11(2023, 5, 30);
+	Date d12(2022, 9, 26);
+	int d = d12 - d11;
 
 	return 0;
 }
