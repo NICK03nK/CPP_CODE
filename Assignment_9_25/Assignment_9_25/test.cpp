@@ -57,6 +57,11 @@ public:
 	// 日期+=天数
 	Date& operator+=(int day)
 	{
+		if (day < 0)
+		{
+			return *this -= -day;
+		}
+
 		_day += day;
 
 		while (_day > GetMonthDay(_year, _month))
@@ -97,9 +102,14 @@ public:
 	// 日期-=天数
 	Date& operator-=(int day)
 	{
+		if (day < 0)
+		{
+			return *this += -day;
+		}
+
 		_day -= day;
 
-		while (_day < 0)
+		while (_day <= 0)
 		{
 			_month--;
 
@@ -135,7 +145,7 @@ public:
 		return *this;
 	}
 
-	// 后置++
+	// 后置++  C++规定后置加一个int类型的参数
 	Date operator++(int)
 	{
 		Date ret(*this);
@@ -145,7 +155,7 @@ public:
 		return ret;
 	}
 
-	// 后置--
+	// 后置--  C++规定后置加一个int类型的参数
 	Date operator--(int)
 	{
 		Date ret(*this);
