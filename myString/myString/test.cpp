@@ -131,9 +131,80 @@ void Test_10()
 	cout << s1.empty() << endl;
 }
 
+// ²âÊÔreserve
+void Test_11()
+{
+	myString::string s1("hello world");
+	
+	// 1. n < _size
+	//s1.resize(5);
+
+	// 2. _size < n <= _capacity
+	/*s1.reserve(15);
+	s1.resize(13, '!');*/
+
+	// 3. n > capacity
+	s1.reserve(13);
+	s1.resize(15, '!');
+
+	cout << s1.c_str() << endl;
+}
+
+// ²âÊÔfind_c
+void Test_12()
+{
+	myString::string s1("hello nK!");
+
+	//size_t pos = s1.find('!');
+	size_t pos = s1.find('l', 3);
+
+	cout << pos << endl;
+}
+
+// ²âÊÔfind_subStr
+void Test_13()
+{
+	//myString::string s1("helwlowbitnK!");
+	myString::string s1("helwwbiowbitnK!");
+
+	const char* s = "wbi";
+	//size_t pos = s1.find(s);
+	//size_t pos = s1.find(s, 5);
+	size_t pos = s1.find(s, 25);
+
+	/*const char* s = "wi";
+	size_t pos = s1.find(s);*/
+
+	cout << pos << endl;
+}
+
+// ²âÊÔinsert_c
+void Test_14()
+{
+	myString::string s1("hello nK!");
+
+	s1.insert(4, 'x');
+	//s1.insert(24, 'x');
+
+	/*s1.reserve(20);
+	s1.insert(4, 'x');*/
+
+	cout << s1.c_str() << endl;
+}
+
+// ²âÊÔinser_str
+void Test_15()
+{
+	myString::string s1("hello nK!");
+
+
+
+	cout << s1.c_str() << endl;
+}
+
 int main()
 {
-	Test_10();
+	Test_15();
 
 	return 0;
 }

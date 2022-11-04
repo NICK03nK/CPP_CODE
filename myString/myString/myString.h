@@ -16,16 +16,7 @@ namespace myString
 
 		string(const string& s);
 
-		string& operator=(const string& s)
-		{
-			_size = s._size;
-			_capacity = s._capacity;
-			_str = new char[_capacity + 1];
-
-			strcpy(_str, s._str);
-
-			return *this;
-		}
+		string& operator=(const string& s);
 
 		~string();
 
@@ -33,30 +24,13 @@ namespace myString
 
 		iterator end();
 
-		char& operator[](size_t pos)
-		{
-			assert(pos < _size);
-			
-			return _str[pos];
-		}
-
 		void push_back(char c);
 
 		void append(const char* str);
 
-		string& operator+=(char c)
-		{
-			push_back(c);
+		string& operator+=(char c);
 
-			return *this;
-		}
-
-		string& operator+=(const char* str)
-		{
-			append(str);
-
-			return *this;
-		}
+		string& operator+=(const char* str);
 
 		void clear();
 
@@ -73,6 +47,30 @@ namespace myString
 		void resize(size_t n, char c = '\0');
 		
 		void reserve(size_t n);
+
+		char& operator[](size_t index);
+
+		const char& operator[](size_t index)const;
+
+		bool operator<(const string& s);
+
+		bool operator<=(const string& s);
+
+		bool operator>(const string& s);
+
+		bool operator>=(const string& s);
+
+		bool operator==(const string& s);
+
+		bool operator!=(const string& s);
+
+		size_t find(char c, size_t pos = 0) const;
+
+		size_t find(const char* s, size_t pos = 0) const;
+
+		string& insert(size_t pos, char c);
+
+		string& insert(size_t pos, const char* str);
 
 	private:
 		char* _str;

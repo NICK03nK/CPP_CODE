@@ -20,6 +20,17 @@ myString::string::string(const string& s)
 	strcpy(_str, s._str);
 }
 
+myString::string& myString::string::operator=(const string& s)
+{
+	_size = s._size;
+	_capacity = s._capacity;
+	_str = new char[_capacity + 1];
+
+	strcpy(_str, s._str);
+
+	return *this;
+}
+
 myString::string::~string()
 {
 	//cout << "myString::string::~string()" << endl;
@@ -65,6 +76,20 @@ void myString ::string::append(const char* str)
 		++str;
 	}
 	_str[_size] = '\0';
+}
+
+myString::string& myString::string::operator+=(char c)
+{
+	push_back(c);
+
+	return *this;
+}
+
+myString::string& myString::string::operator+=(const char* str)
+{
+	append(str);
+
+	return *this;
 }
 
 void myString::string::clear()
@@ -120,17 +145,163 @@ bool myString::string::empty()const
 	return _size == 0;
 }
 
-void myString::string::resize(size_t n, char c = '\0')
+void myString::string::resize(size_t n, char c)
 {
+	if (n < _size)
+	{
+		_size = n;
+		_str[_size] = '\0';
+	}
+	else if (n > _size && n <= _capacity)
+	{
+		while (_size != n)
+		{
+			_str[_size] = c;
+			++_size;
+		}
+		_str[_size] = '\0';
+	}
+	else if (n > _capacity)
+	{
+		reserve(n);
 
+		while (_size != n)
+		{
+			_str[_size] = c;
+			++_size;
+		}
+		_str[_size] = '\0';
+	}
 }
 
 void myString::string::reserve(size_t n)
 {
-	char* tmp = new char[n + 1];
+	if (n > _capacity)
+	{
+		char* tmp = new char[n + 1];
 
-	strcpy(tmp, _str);
-	delete[] _str;
-	_str = tmp;
-	_capacity = n;
+		strcpy(tmp, _str);
+		delete[] _str;
+		_str = tmp;
+		_capacity = n;
+	}
+}
+
+char& myString::string::operator[](size_t index)
+{
+	assert(index < _size);
+
+	return _str[index];
+}
+
+const char& myString::string::operator[](size_t index)const
+{
+	assert(index < _size);
+
+	return _str[index];
+}
+
+bool myString::string::operator<(const string& s)
+{
+	return strcmp(_str, s._str) < 0;
+}
+
+//bool myString::string::operator<=(const string& s)
+//{
+//
+//}
+
+bool myString::string::operator>(const string& s)
+{
+	return strcmp(_str, s._str) > 0;
+}
+
+//bool operator>=(const string& s)
+//{
+//
+//}
+
+bool myString::string::operator==(const string& s)
+{
+	return strcmp(_str, s._str) == 0;
+}
+
+bool myString::string::operator!=(const string& s)
+{
+	return strcmp(_str, s._str) != 0;
+}
+
+size_t myString::string::find(char c, size_t pos) const
+{
+	if (pos >= _size)
+	{
+		return -1;
+	}
+
+	for (size_t i = pos; i < _size; ++i)
+	{
+		if (_str[i] == c)
+		{
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+size_t myString::string::find(const char* s, size_t pos) const
+{
+	if (pos >= _size)
+	{
+		return -1;
+	}
+
+	if (strstr(_str + pos, s))
+	{
+		return strstr(_str + pos, s) - _str;
+	}
+	else
+	{
+		return -1;
+	}
+}
+
+myString::string& myString::string::insert(size_t pos, char c)
+{
+	assert(pos < _size);
+
+	char* tmp = new char[_capacity + 2];
+
+	if (_size + 1 > _capacity)
+	{
+		reserve(_capacity + 1);
+	}
+
+	int i = 0;
+	int j = 0;
+	while (i < _size)
+	{
+		if (i == pos)
+		{
+			tmp[j++] = c;
+			tmp[j++] = _str[i++];
+		}
+		else
+		{
+			tmp[j++] = _str[i++];
+		}
+	}
+
+	strncpy(_str, tmp, j);
+	_size += 1;
+	_str[_size] = '\0';
+
+	delete[] tmp;
+
+	return *this;
+}
+
+myString::string& myString::string::insert(size_t pos, const char* str)
+{
+
 }
