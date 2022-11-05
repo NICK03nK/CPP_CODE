@@ -1,2 +1,5 @@
 ﻿  myString.cpp
-  myString.vcxproj -> D:\VS 2022\GitHub_repository\CPP_CODE\myString\x64\Debug\myString.exe
+D:\VS 2022\GitHub_repository\CPP_CODE\myString\myString\myString.cpp(318,23): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  test.cpp
+  正在生成代码...
+D:\VS 2022\GitHub_repository\CPP_CODE\myString\myString\myString.cpp : fatal  error C1090: PDB API 调用失败，错误代码“3”: D:\VS 2022\GitHub_repository\CPP_CODE\myString\myString\x64\Debug\vc143.pdb

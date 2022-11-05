@@ -22,11 +22,27 @@ myString::string::string(const string& s)
 
 myString::string& myString::string::operator=(const string& s)
 {
-	_size = s._size;
-	_capacity = s._capacity;
-	_str = new char[_capacity + 1];
+	// 以下方式实现会导致内存泄露
+	/*if (this != &s)
+	{
+		_size = s._size;
+		_capacity = s._capacity;
+		_str = new char[_capacity + 1];
 
-	strcpy(_str, s._str);
+		strcpy(_str, s._str);
+	}*/
+
+	if (this != &s)
+	{
+		char* tmp = new char[s._capacity + 1];
+		strcpy(tmp, s._str);
+
+		delete[] _str;
+		_str = tmp;
+
+		_size = s._size;
+		_capacity = s._capacity;
+	}
 
 	return *this;
 }
@@ -118,7 +134,7 @@ void myString::string::swap(string& s)
 	s._size = tmpStr._size;
 	s._capacity = tmpStr._capacity;
 
-	// 以下方法实现swap会造成内存泄露
+	// 以下方法实现swap会造成内存泄露(仅针对第一种方法实现opreator=)
 	//string tmpStr = *this;
 	////char* test = _str;    // 指针test用于验证用此方法会造成内存泄露(成员变量_str原先指向的空间没被释放)
 	//*this = s;
@@ -233,10 +249,7 @@ bool myString::string::operator!=(const string& s)
 
 size_t myString::string::find(char c, size_t pos) const
 {
-	if (pos >= _size)
-	{
-		return -1;
-	}
+	assert(pos < _size);
 
 	for (size_t i = pos; i < _size; ++i)
 	{
@@ -246,15 +259,12 @@ size_t myString::string::find(char c, size_t pos) const
 		}
 	}
 
-	return -1;
+	return npos;
 }
 
 size_t myString::string::find(const char* s, size_t pos) const
 {
-	if (pos >= _size)
-	{
-		return -1;
-	}
+	assert(pos < _size);
 
 	if (strstr(_str + pos, s))
 	{
@@ -262,13 +272,13 @@ size_t myString::string::find(const char* s, size_t pos) const
 	}
 	else
 	{
-		return -1;
+		return npos;
 	}
 }
 
 myString::string& myString::string::insert(size_t pos, char c)
 {
-	assert(pos < _size);
+	assert(pos <= _size);
 
 	char* tmp = new char[_capacity + 2];
 
@@ -303,5 +313,42 @@ myString::string& myString::string::insert(size_t pos, char c)
 
 myString::string& myString::string::insert(size_t pos, const char* str)
 {
+	assert(pos <= _size);
 
+	int len = strlen(str);
+	char* tmp = new char[_size + len + 1];
+
+	if (_size + len > _capacity)
+	{
+		reserve(_size + len);
+	}
+
+	int i = 0;
+	int j = 0;
+	while (i < _size)
+	{
+		if (i == pos)
+		{
+			strcpy(tmp + i, str);
+			j += len;
+			tmp[j++] = _str[i++];
+		}
+		else
+		{
+			tmp[j++] = _str[i++];
+		}
+	}
+
+	strncpy(_str, tmp, j);
+	_size += len;
+	_str[_size] = '\0';
+
+	delete[] tmp;
+
+	return *this;
+}
+
+myString::string& myString::string::erase(size_t pos, size_t len)
+{
+	
 }

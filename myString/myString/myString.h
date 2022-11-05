@@ -72,9 +72,13 @@ namespace myString
 
 		string& insert(size_t pos, const char* str);
 
+		string& erase(size_t pos, size_t len = npos);
+
 	private:
 		char* _str;
 		size_t _size;
 		size_t _capacity;
+
+		const static size_t npos = -1;
 	};
 }

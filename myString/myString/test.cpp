@@ -197,14 +197,24 @@ void Test_15()
 {
 	myString::string s1("hello nK!");
 
+	//s1.insert(4, "xxx");
+	//s1.insert(24, "xxx");
 
+	s1.reserve(20);
+	s1.insert(4, "xxxx");
 
 	cout << s1.c_str() << endl;
 }
 
+// ²âÊÔerase
+void Test_16()
+{
+	
+}
+
 int main()
 {
-	Test_15();
+	Test_16();
 
 	return 0;
 }
