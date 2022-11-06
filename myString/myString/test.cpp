@@ -209,12 +209,44 @@ void Test_15()
 // ≤‚ ‘erase
 void Test_16()
 {
+	myString::string s1("hello world!");
 	
+	s1.erase(5, 100);
+
+	cout << s1.c_str() << endl;
+
+	myString::string s2("hello hello world!");
+	
+	s2.erase(0, 6);
+
+	cout << s2.c_str() << endl;
+}
+
+// ≤‚ ‘operator<<∫Õoperator>>
+void Test_17()
+{
+	myString::string s1("hello world!");
+
+	cout << s1 << endl;
+	cout << s1.c_str() << endl;
+
+	s1.insert(5, '\0');
+
+	cout << s1 << endl;
+	cout << s1.c_str() << endl;
+
+	myString::string s2;
+
+	cin >> s1;
+	cout << s1 << endl;
+
+	cin >> s2;
+	cout << s2 << endl;
 }
 
 int main()
 {
-	Test_16();
+	Test_17();
 
 	return 0;
 }

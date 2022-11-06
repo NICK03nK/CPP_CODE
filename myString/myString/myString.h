@@ -8,6 +8,10 @@ namespace myString
 {
 	class string
 	{
+		friend ostream& operator<<(ostream& out, const myString::string& s);
+
+		friend istream& operator>>(istream& in, myString::string& s);
+
 	public:
 		typedef char* iterator;
 
@@ -81,4 +85,8 @@ namespace myString
 
 		const static size_t npos = -1;
 	};
+
+	ostream& operator<<(ostream& out, const myString::string& s);
+
+	istream& operator>>(istream& in, myString::string& s);
 }

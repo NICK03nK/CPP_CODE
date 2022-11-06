@@ -69,7 +69,8 @@ void myString::string::push_back(char c)
 {
 	if (_size == _capacity)
 	{
-		myString::string::reserve(_capacity * 2);
+		size_t newCapacity = _capacity == 0 ? 4 : _capacity * 2;
+		reserve(newCapacity);
 	}
 
 	_str[_size] = c;
@@ -222,20 +223,20 @@ bool myString::string::operator<(const string& s)
 	return strcmp(_str, s._str) < 0;
 }
 
-//bool myString::string::operator<=(const string& s)
-//{
-//
-//}
+bool myString::string::operator<=(const string& s)
+{
+	return *this < s || *this == s;
+}
 
 bool myString::string::operator>(const string& s)
 {
 	return strcmp(_str, s._str) > 0;
 }
 
-//bool operator>=(const string& s)
-//{
-//
-//}
+bool myString::string::operator>=(const string& s)
+{
+	return *this > s || *this == s;
+}
 
 bool myString::string::operator==(const string& s)
 {
@@ -280,33 +281,21 @@ myString::string& myString::string::insert(size_t pos, char c)
 {
 	assert(pos <= _size);
 
-	char* tmp = new char[_capacity + 2];
-
-	if (_size + 1 > _capacity)
+	if (_size == _capacity)
 	{
-		reserve(_capacity + 1);
+		size_t newCapacity = _capacity == 0 ? 4 : _capacity * 2;
+		reserve(newCapacity);
 	}
 
-	int i = 0;
-	int j = 0;
-	while (i < _size)
+	size_t end = _size + 1;
+	while (end > pos)
 	{
-		if (i == pos)
-		{
-			tmp[j++] = c;
-			tmp[j++] = _str[i++];
-		}
-		else
-		{
-			tmp[j++] = _str[i++];
-		}
+		_str[end] = _str[end - 1];
+		--end;
 	}
 
-	strncpy(_str, tmp, j);
-	_size += 1;
-	_str[_size] = '\0';
-
-	delete[] tmp;
+	_str[pos] = c;
+	++_size;
 
 	return *this;
 }
@@ -315,40 +304,63 @@ myString::string& myString::string::insert(size_t pos, const char* str)
 {
 	assert(pos <= _size);
 
-	int len = strlen(str);
-	char* tmp = new char[_size + len + 1];
-
+	size_t len = strlen(str);
 	if (_size + len > _capacity)
 	{
 		reserve(_size + len);
 	}
 
-	int i = 0;
-	int j = 0;
-	while (i < _size)
+	size_t end = _size + len;
+	while (end > pos + len - 1)
 	{
-		if (i == pos)
-		{
-			strcpy(tmp + i, str);
-			j += len;
-			tmp[j++] = _str[i++];
-		}
-		else
-		{
-			tmp[j++] = _str[i++];
-		}
+		_str[end] = _str[end - len];
+		--end;
 	}
 
-	strncpy(_str, tmp, j);
+	strncpy(_str + pos, str, len);
 	_size += len;
-	_str[_size] = '\0';
-
-	delete[] tmp;
 
 	return *this;
 }
 
 myString::string& myString::string::erase(size_t pos, size_t len)
 {
-	
+	assert(pos < _size);
+
+	if (len == npos || len >= _size - pos)
+	{
+		_str[pos] = '\0';
+		_size = pos;
+	}
+	else
+	{
+		strcpy(_str + pos, _str + pos + len);
+		_size -= len;
+	}
+
+	return *this;
+}
+
+ostream& myString::operator<<(ostream& out, const myString::string& s)
+{
+	for (size_t i = 0; i < s._size; ++i)
+	{
+		out << s[i];
+	}
+
+	return out;
+}
+
+istream& myString::operator>>(istream& in, myString::string& s)
+{
+	s.clear();
+
+	char c = in.get();
+	while (c != ' ' && c != '\n')
+	{
+		s += c;
+		c = in.get();
+	}
+
+	return in;
 }
