@@ -10,7 +10,7 @@ void Test_1()
 	cout << s1.c_str() << endl;
 }
 
-// 测试string类类型构造函数
+// 测试拷贝构造函数
 void Test_2()
 {
 	myString::string s1("hello nK!");
@@ -25,16 +25,17 @@ void Test_3()
 {
 	myString::string s1("hello nK!");
 
-	//myString::string s2 = s1;
-	//myString::string s2 = "test myString";
+	/*myString::string s2 = s1;*/
+	myString::string s2 = "test myString";
+	s2 = s1;
 
-	myString::string s2, s3, s4;
+	/*myString::string s2, s3, s4;
 
 	s2 = s3 = s4 = s1;
 
 	cout << s2.c_str() << endl;
 	cout << s3.c_str() << endl;
-	cout << s4.c_str() << endl;
+	cout << s4.c_str() << endl;*/
 }
 
 // 测试析构函数
@@ -246,7 +247,7 @@ void Test_17()
 
 int main()
 {
-	Test_17();
+	Test_3();
 
 	return 0;
 }

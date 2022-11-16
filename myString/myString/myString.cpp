@@ -11,39 +11,73 @@ myString::string::string(const char* s)
 	strcpy(_str, s);
 }
 
-myString::string::string(const string& s)
-{
-	_size = s._size;
-	_capacity = s._capacity;
-	_str = new char[_capacity + 1];
+// 传统写法
+//myString::string::string(const string& s)
+//{
+//	_size = s._size;
+//	_capacity = s._capacity;
+//	_str = new char[_capacity + 1];
+//
+//	strcpy(_str, s._str);
+//}
 
-	strcpy(_str, s._str);
+// 现代写法
+myString::string::string(const string& s)
+	:_str(nullptr)
+	, _size(0)
+	, _capacity(0)
+{
+	myString::string tmp(s._str);  // 调用构造函数
+	/*std::swap(_str, tmp._str);
+	std::swap(_size, tmp._size);
+	std::swap(_capacity, tmp._capacity);*/
+	swap(tmp);
 }
 
-myString::string& myString::string::operator=(const string& s)
+// 传统写法
+//myString::string& myString::string::operator=(const string& s)
+//{
+//	// 以下方式实现会导致内存泄露
+//	/*if (this != &s)
+//	{
+//		_size = s._size;
+//		_capacity = s._capacity;
+//		_str = new char[_capacity + 1];
+//
+//		strcpy(_str, s._str);
+//	}*/
+//
+//	if (this != &s)
+//	{
+//		char* tmp = new char[s._capacity + 1];
+//		strcpy(tmp, s._str);
+//
+//		delete[] _str;
+//		_str = tmp;
+//
+//		_size = s._size;
+//		_capacity = s._capacity;
+//	}
+//
+//	return *this;
+//}
+
+// 现代写法1
+//myString::string& myString::string::operator=(const string& s)
+//{
+//	if (this != &s)
+//	{
+//		myString::string tmp(s._str);
+//		swap(tmp);
+//	}
+//
+//	return *this;
+//}
+
+// 现代写法2
+myString::string& myString::string::operator=(string s)
 {
-	// 以下方式实现会导致内存泄露
-	/*if (this != &s)
-	{
-		_size = s._size;
-		_capacity = s._capacity;
-		_str = new char[_capacity + 1];
-
-		strcpy(_str, s._str);
-	}*/
-
-	if (this != &s)
-	{
-		char* tmp = new char[s._capacity + 1];
-		strcpy(tmp, s._str);
-
-		delete[] _str;
-		_str = tmp;
-
-		_size = s._size;
-		_capacity = s._capacity;
-	}
-
+	swap(s);
 	return *this;
 }
 
@@ -117,29 +151,9 @@ void myString::string::clear()
 
 void myString::string::swap(string& s)
 {
-	string tmpStr(*this);
-
-	if (s._size > _size)
-	{
-		myString::string::reserve(s._size);
-	}
-	strcpy(_str, s._str);
-	_size = s._size;
-	_capacity = s._capacity;
-
-	if (s._size < tmpStr._size)
-	{
-		s.reserve(tmpStr._size);
-	}
-	strcpy(s._str, tmpStr._str);
-	s._size = tmpStr._size;
-	s._capacity = tmpStr._capacity;
-
-	// 以下方法实现swap会造成内存泄露(仅针对第一种方法实现opreator=)
-	//string tmpStr = *this;
-	////char* test = _str;    // 指针test用于验证用此方法会造成内存泄露(成员变量_str原先指向的空间没被释放)
-	//*this = s;
-	//s = tmpStr;
+	std::swap(_str, s._str);
+	std::swap(_size, s._size);
+	std::swap(_capacity, s._capacity);
 }
 
 const char* myString::string::c_str()const

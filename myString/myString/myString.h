@@ -20,7 +20,8 @@ namespace myString
 
 		string(const string& s);
 
-		string& operator=(const string& s);
+		//string& operator=(const string& s);
+		string& operator=(string s);  // ÏÖ´úĞ´·¨2
 
 		~string();
 
