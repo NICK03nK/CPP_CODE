@@ -55,18 +55,47 @@ namespace myVector
 		{
 			if (n > capacity())
 			{
+				// 解决_finish始终为nullptr的问题
+				size_t oldSize = size();
+
 				T* tmp = new T[n];
 				
 				if (_start)
 				{
-					memcpy(tmp, _start, sizeof(T) * size());
+					memcpy(tmp, _start, sizeof(T) * oldSize);
 					delete[] _start;
 				}
 
 				_start = tmp;
-				_finish = _start + size();
-				_endOfStorage = _start + capacity();
+				_finish = _start + oldSize;
+				_endOfStorage = _start + n;
 			}
+		}
+
+		void resize(size_t n, const T& value = T())
+		{
+			if (n > capacity())  // 扩容 + 插入数据
+			{
+				reserve(n);
+			}
+
+			if (n > size())  // 插入数据
+			{
+				while (_finish < _start + n)
+				{
+					*_finish = value;
+					++_finish;
+				}
+			}
+			else  // 删除数据
+			{
+				_finish = _start + n;
+			}
+		}
+
+		bool empty()
+		{
+			return _finish = _start;
 		}
 
 		T& operator[](size_t pos)
@@ -87,7 +116,41 @@ namespace myVector
 			++_finish;
 		}
 
+		void pop_back()
+		{
+			assert(!empty());
 
+			--_finish;
+		}
+
+		// 可能存在迭代器失效问题(也是一种野指针问题)
+		void insert(iterator pos, const T& x)
+		{
+			assert(pos >= _start);
+			assert(pos < _finish);
+
+			if (_finish == _endOfStorage)
+			{
+				// 扩容会导致pos迭代器失效
+				size_t len = pos - _start;
+
+				size_t newCapcity = capacity() == 0 ? 4 : capacity() * 2;
+				reserve(newCapcity);
+
+				// 需要更新pos来解决迭代器失效的问题
+				pos = _start + len;
+			}
+
+			iterator end = _finish - 1;
+			while (end >= pos)
+			{
+				*(end + 1) = *end;
+				--end;
+			}
+
+			*pos = x;
+			++_finish;
+		}
 
 	private:
 		iterator _start;
