@@ -91,9 +91,48 @@ void Test3()
 	cout << endl;
 }
 
+// ²âÊÔerase()
+void Test4()
+{
+	myVector::vector<int> v;
+	v.push_back(1);
+	v.push_back(2);
+	v.push_back(2);
+	v.push_back(3);
+	v.push_back(4);
+	v.push_back(5);
+
+
+	/*myVector::vector<int>::iterator it = find(v.begin(), v.end(), 4);
+	if (it != v.end())
+	{
+		it = v.erase(it);
+	}
+	cout << *it << endl;*/
+
+	myVector::vector<int>::iterator it = v.begin();
+	while (it != v.end())
+	{
+		if (*it % 2 == 0)
+		{
+			it = v.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
+
+	for (auto e : v)
+	{
+		cout << e << " ";
+	}
+	cout << endl;
+}
+
 int main()
 {
-	Test3();
+	Test4();
 
 	return 0;
 }

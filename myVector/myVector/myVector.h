@@ -124,7 +124,7 @@ namespace myVector
 		}
 
 		// 可能存在迭代器失效问题(也是一种野指针问题)
-		void insert(iterator pos, const T& x)
+		iterator insert(iterator pos, const T& x)
 		{
 			assert(pos >= _start);
 			assert(pos < _finish);
@@ -150,6 +150,25 @@ namespace myVector
 
 			*pos = x;
 			++_finish;
+
+			return pos;
+		}
+
+		iterator erase(iterator pos)
+		{
+			assert(pos >= _start);
+			assert(pos < _finish);
+
+			iterator begin = pos + 1;
+
+			while (begin < _finish)
+			{
+				*(begin - 1) = *begin;
+				++begin;
+			}
+			--_finish;
+
+			return pos;
 		}
 
 	private:
