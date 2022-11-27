@@ -123,6 +123,11 @@ namespace myVector
 			--_finish;
 		}
 
+		void swap(vector<T>& vT)
+		{
+
+		}
+
 		// 可能存在迭代器失效问题(也是一种野指针问题)
 		iterator insert(iterator pos, const T& x)
 		{
