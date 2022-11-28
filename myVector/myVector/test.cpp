@@ -130,9 +130,75 @@ void Test4()
 	cout << endl;
 }
 
+// 测试拷贝构造函数，迭代器构造函数，赋值重载函数
+void Test5()
+{
+	myVector::vector<int> v;
+	v.push_back(1);
+	v.push_back(2);
+	v.push_back(3);
+	v.push_back(4);
+
+	//myVector::vector<int> v1(v);  // 拷贝构造
+	myVector::vector<int> v1 = v;  // 拷贝构造
+	v1.push_back(40);
+	for (auto e : v1)
+	{
+		cout << e << " ";
+	}
+	cout << endl;
+
+	myVector::vector<int> v2;
+	v2.push_back(10);
+	v2.push_back(20);
+
+	v1 = v2;
+	for (auto e : v1)
+	{
+		cout << e << " ";
+	}
+	cout << endl;
+}
+
+// 测试n个value的构造函数
+void Test6()
+{
+	myVector::vector<int> vi(10, 1);
+	for (auto e : vi)
+	{
+		cout << e << " ";
+	}
+	cout << endl;
+}
+
+// 测试解决vector<自定义类型>浅拷贝问题(以 vector<vector<int>> 为例)
+void Test7()
+{
+	myVector::vector<myVector::vector<int>> vvi;
+	
+	myVector::vector<int> vi;
+	vi.resize(4, 1);
+
+	vvi.push_back(vi);
+	vvi.push_back(vi);
+	vvi.push_back(vi);
+	vvi.push_back(vi);
+	vvi.push_back(vi);
+
+	for (int i = 0; i < vvi.size(); ++i)
+	{
+		for (int j = 0; j < vvi[i].size(); ++j)
+		{
+			cout << vvi[i][j] << " ";
+		}
+		cout << endl;
+	}
+	cout << endl;
+}
+
 int main()
 {
-	Test4();
+	Test7();
 
 	return 0;
 }

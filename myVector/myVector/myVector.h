@@ -37,8 +37,67 @@ namespace myVector
 			:_start(nullptr)
 			, _finish(nullptr)
 			, _endOfStorage(nullptr)
+		{}
+
+		vector(size_t n, const T& value = T())
+			:_start(nullptr)
+			, _finish(nullptr)
+			, _endOfStorage(nullptr)
 		{
-			;
+			reserve(n);
+			for (size_t i = 0; i < n; ++i)
+			{
+				push_back(value);
+			}
+		}
+
+		// 这里要另外实现一个n的类型为int的构造函数
+		// 如果不实现，构造函数将会去调用迭代器构造
+		// 而不是n个value构造
+		vector(int n, const T& value = T())
+			:_start(nullptr)
+			, _finish(nullptr)
+			, _endOfStorage(nullptr)
+		{
+			reserve(n);
+			for (int i = 0; i < n; ++i)
+			{
+				push_back(value);
+			}
+		}
+
+		template<class inputIterator>
+		vector(inputIterator first, inputIterator last)
+			: _start(nullptr)
+			, _finish(nullptr)
+			, _endOfStorage(nullptr)
+		{
+			while (first != last)
+			{
+				push_back(*first);
+				++first;
+			}
+		}
+
+		vector(const vector<T>& vT)
+			: _start(nullptr)
+			, _finish(nullptr)
+			, _endOfStorage(nullptr)
+		{
+			vector<T> tmp(vT.cbegin(), vT.cend());
+			swap(tmp);
+		}
+
+		vector& operator=(vector<T> vT)
+		{
+			swap(vT);
+			return *this;
+		}
+
+		~vector()
+		{
+			delete[] _start;
+			_start = _finish = _endOfStorage = nullptr;
 		}
 
 		size_t size() const
@@ -62,7 +121,17 @@ namespace myVector
 				
 				if (_start)
 				{
-					memcpy(tmp, _start, sizeof(T) * oldSize);
+					// 若vector<T>中的T为自定义类型(vector<int>，string等)
+					// 用memecpy()来拷贝数据，当发生扩容时，就会出现浅拷贝问题
+					// 浅拷贝后，把原先的空间释放掉，拷贝到tmp中的空间也会被释放
+					//memcpy(tmp, _start, sizeof(T) * oldSize);
+
+					// 复用赋值重载函数来解决上述问题
+					for (int i = 0; i < oldSize; ++i)
+					{
+						tmp[i] = _start[i];
+					}
+
 					delete[] _start;
 				}
 
@@ -104,6 +173,12 @@ namespace myVector
 			return _start[pos];
 		}
 
+		const T& operator[](size_t pos) const
+		{
+			assert(pos < size());
+			return _start[pos];
+		}
+
 		void push_back(const T& x)
 		{
 			if (_finish == _endOfStorage)
@@ -125,7 +200,9 @@ namespace myVector
 
 		void swap(vector<T>& vT)
 		{
-
+			std::swap(_start, vT._start);
+			std::swap(_finish, vT._finish);
+			std::swap(_endOfStorage, vT._endOfStorage);
 		}
 
 		// 可能存在迭代器失效问题(也是一种野指针问题)
@@ -174,6 +251,11 @@ namespace myVector
 			--_finish;
 
 			return pos;
+		}
+
+		void clear()
+		{
+			_finish = _start;
 		}
 
 	private:
