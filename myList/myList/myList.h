@@ -41,6 +41,12 @@ namespace myList
 			return *this;
 		}
 
+		__list_iterator<T>& operator--()
+		{
+			_pnode = _pnode->_prev;
+			return *this;
+		}
+
 		bool operator!=(const __list_iterator<T>& it)
 		{
 			return _pnode != it._pnode;
@@ -64,11 +70,35 @@ namespace myList
 			return iterator(_head);
 		}
 
-		list()
+		void empty_initialize()
 		{
 			_head = new node(T());
 			_head->_next = _head;
 			_head->_prev = _head;
+		}
+
+		list()
+		{
+			empty_initialize();
+		}
+
+		// --->下次从拷贝构造开始
+		/*list(list<T>& lT)
+		{
+			empty_initialize();
+
+			for (auto e : lT)
+			{
+				push_back(e);
+			}
+		}*/
+
+		~list()
+		{
+			clear();
+
+			delete _head;
+			_head = nullptr;
 		}
 
 		void push_back(const T& value)
@@ -88,6 +118,16 @@ namespace myList
 		void push_front(const T& value)
 		{
 			insert(begin(), value);
+		}
+
+		void pop_back()
+		{
+			erase(--end());
+		}
+
+		void pop_front()
+		{
+			erase(begin());
 		}
 
 		iterator insert(iterator pos, const T& value)
@@ -117,6 +157,15 @@ namespace myList
 			delete pos._pnode;
 
 			return iterator(next);
+		}
+
+		void clear()
+		{
+			iterator it = begin();
+			while (it != end())
+			{
+				it = erase(it);
+			}
 		}
 
 	private:

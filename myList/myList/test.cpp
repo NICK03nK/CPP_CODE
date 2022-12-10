@@ -59,9 +59,41 @@ void Test2()
 	cout << endl;
 }
 
+// ²âÊÔerase()£¬pop_back()£¬pop_front()
+void Test3()
+{
+	myList::list<int> li;
+
+	li.push_back(1);
+	li.push_back(2);
+	li.push_back(3);
+	li.push_back(4);
+
+	li.push_front(5);
+	li.push_front(6);
+
+	for (auto e : li)
+	{
+		cout << e << " ";
+	}
+	cout << endl;
+
+	li.pop_back();
+	li.pop_back();
+
+	li.pop_front();
+	li.pop_front();
+
+	for (auto e : li)
+	{
+		cout << e << " ";
+	}
+	cout << endl;
+}
+
 int main()
 {
-	Test2();
+	Test3();
 
 	return 0;
 }
