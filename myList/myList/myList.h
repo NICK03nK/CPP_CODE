@@ -20,45 +20,84 @@ namespace myList
 		{}
 	};
 
-	template<class T>
+	// typedef __list_iterator<T, T&> iterator;
+	// typedef __list_iterator<T, const T&> const_iterator;
+	// 以上两个是属于不同的类，通过给__list_iterator模板传不同的参数从而实例化出不同的类
+	template<class T, class Ref>
 	struct __list_iterator
 	{
 		typedef list_node<T> node;
+		typedef __list_iterator<T, Ref> Self;  // 使用typedef将__list_iterator<T, Ref>重命名为Self，便于后续统一处理成员函数的返回值
 		node* _pnode;
 
 		__list_iterator(node* p)
 			:_pnode(p)
 		{}
 
-		T& operator*()
+		Ref operator*()
 		{
 			return _pnode->_data;
 		}
 
-		__list_iterator<T>& operator++()
+		Self& operator++()
 		{
 			_pnode = _pnode->_next;
 			return *this;
 		}
 
-		__list_iterator<T>& operator--()
+		Self& operator--()
 		{
 			_pnode = _pnode->_prev;
 			return *this;
 		}
 
-		bool operator!=(const __list_iterator<T>& it)
+		bool operator!=(const Self& it)
 		{
 			return _pnode != it._pnode;
 		}
 	};
+
+	/*template<class T>
+	struct __list_const_iterator
+	{
+		typedef list_node<T> node;
+		node* _pnode;
+
+		__list_const_iterator(node* p)
+			:_pnode(p)
+		{}
+
+		const T& operator*()
+		{
+			return _pnode->_data;
+		}
+
+		__list_const_iterator<T>& operator++()
+		{
+			_pnode = _pnode->_next;
+			return *this;
+		}
+
+		__list_const_iterator<T>& operator--()
+		{
+			_pnode = _pnode->_prev;
+			return *this;
+		}
+
+		bool operator!=(const __list_const_iterator<T>& it)
+		{
+			return _pnode != it._pnode;
+		}
+	};*/
 
 	template<class T>
 	class list
 	{
 	public:
 		typedef list_node<T> node;
-		typedef __list_iterator<T> iterator;
+		typedef __list_iterator<T, T&> iterator;
+		typedef __list_iterator<T, const T&> const_iterator;
+		//typedef __list_const_iterator<T> const_iterator;
 
 		iterator begin()
 		{
@@ -68,6 +107,16 @@ namespace myList
 		iterator end()
 		{
 			return iterator(_head);
+		}
+
+		const_iterator begin() const
+		{
+			return const_iterator(_head->_next);
+		}
+
+		const_iterator end() const
+		{
+			return const_iterator(_head);
 		}
 
 		void empty_initialize()
@@ -82,16 +131,32 @@ namespace myList
 			empty_initialize();
 		}
 
-		// --->下次从拷贝构造开始
-		/*list(list<T>& lT)
+		// 传统写法
+		list(const list<T>& lT)
 		{
 			empty_initialize();
 
-			for (auto e : lT)
+			for (const auto& e : lT)
 			{
 				push_back(e);
 			}
-		}*/
+		}
+
+		// 传统写法
+		list<T>& operator=(const list<T>& lT)
+		{
+			if (this != &lT)
+			{
+				clear();
+
+				for (const auto& e : lT)
+				{
+					push_back(e);
+				}
+			}
+
+			return *this;
+		}
 
 		~list()
 		{

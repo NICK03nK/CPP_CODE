@@ -91,9 +91,51 @@ void Test3()
 	cout << endl;
 }
 
+// 测试拷贝构造和赋值重载
+void Test4()
+{
+	myList::list<int> li;
+
+	li.push_back(1);
+	li.push_back(2);
+	li.push_back(3);
+	li.push_back(4);
+	cout << "li :" << endl;
+	for (auto e : li)
+	{
+		cout << e << " ";
+	}
+	cout << endl;
+
+	myList::list<int> li1(li);
+	cout << "li1 :" << endl;
+	for (auto e : li1)
+	{
+		cout << e << " ";
+	}
+	cout << endl;
+
+	li1.push_back(50);
+	li1.push_back(60);
+	cout << "li1 :" << endl;
+	for (auto e : li1)
+	{
+		cout << e << " ";
+	}
+	cout << endl;
+
+	li = li1;
+	cout << "li :" << endl;
+	for (auto e : li)
+	{
+		cout << e << " ";
+	}
+	cout << endl;
+}
+
 int main()
 {
-	Test3();
+	Test4();
 
 	return 0;
 }
