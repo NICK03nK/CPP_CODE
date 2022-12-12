@@ -99,6 +99,84 @@ namespace myList
 		typedef __list_iterator<T, const T&> const_iterator;
 		//typedef __list_const_iterator<T> const_iterator;
 
+		void empty_initialize()
+		{
+			_head = new node(T());
+			_head->_next = _head;
+			_head->_prev = _head;
+
+			_size = 0;
+		}
+
+		list()
+		{
+			empty_initialize();
+		}
+
+		template <class InputIterator>
+		list(InputIterator first, InputIterator last)
+		{
+			empty_initialize();
+
+			while (first != last)
+			{
+				push_back(*first);
+				++first;
+			}
+		}
+
+		// 传统写法
+		/*list(const list<T>& lT)
+		{
+			empty_initialize();
+
+			for (const auto& e : lT)
+			{
+				push_back(e);
+			}
+		}*/
+
+		// 现代写法
+		list(const list<T>& lT)
+		{
+			empty_initialize();
+
+			list<T> tmp(lT.begin(), lT.end());
+			swap(tmp);
+		}
+
+		// 传统写法
+		/*list<T>& operator=(const list<T>& lT)
+		{
+			if (this != &lT)
+			{
+				clear();
+
+				for (const auto& e : lT)
+				{
+					push_back(e);
+				}
+			}
+
+			return *this;
+		}*/
+
+		// 现代写法
+		list<T>& operator=(list<T> lT)
+		{
+			swap(lT);
+			
+			return *this;
+		}
+
+		~list()
+		{
+			clear();
+
+			delete _head;
+			_head = nullptr;
+		}
+
 		iterator begin()
 		{
 			return iterator(_head->_next);
@@ -119,51 +197,14 @@ namespace myList
 			return const_iterator(_head);
 		}
 
-		void empty_initialize()
+		size_t size() const
 		{
-			_head = new node(T());
-			_head->_next = _head;
-			_head->_prev = _head;
+			return _size;
 		}
 
-		list()
+		bool empty() const
 		{
-			empty_initialize();
-		}
-
-		// 传统写法
-		list(const list<T>& lT)
-		{
-			empty_initialize();
-
-			for (const auto& e : lT)
-			{
-				push_back(e);
-			}
-		}
-
-		// 传统写法
-		list<T>& operator=(const list<T>& lT)
-		{
-			if (this != &lT)
-			{
-				clear();
-
-				for (const auto& e : lT)
-				{
-					push_back(e);
-				}
-			}
-
-			return *this;
-		}
-
-		~list()
-		{
-			clear();
-
-			delete _head;
-			_head = nullptr;
+			return _size == 0;
 		}
 
 		void push_back(const T& value)
@@ -206,6 +247,8 @@ namespace myList
 			newNode->_next = cur;
 			cur->_prev = newNode;
 
+			++_size;
+
 			return iterator(newNode);
 		}
 
@@ -221,6 +264,8 @@ namespace myList
 
 			delete pos._pnode;
 
+			--_size;
+
 			return iterator(next);
 		}
 
@@ -233,7 +278,14 @@ namespace myList
 			}
 		}
 
+		void swap(list<T>& lT)
+		{
+			std::swap(_head, lT._head);
+			std::swap(_size, lT._size);
+		}
+
 	private:
 		node* _head;
+		size_t _size;
 	};
 }
