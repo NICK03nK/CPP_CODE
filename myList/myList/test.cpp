@@ -133,9 +133,43 @@ void Test4()
 	cout << endl;
 }
 
+struct Pos
+{
+	int _row;
+	int _col;
+
+	Pos(int row = 0, int col = 0)
+		:_row(row)
+		, _col(col)
+	{}
+};
+
+// ²âÊÔµü´úÆ÷operator->()
+void Test5()
+{
+	myList::list<Pos> lt;
+	Pos p1(1, 1);
+	lt.push_back(p1);
+	lt.push_back(p1);
+	lt.push_back(p1);
+	lt.push_back(Pos(2, 2));
+	lt.push_back(Pos(3, 3));
+
+	myList::list<Pos>::iterator it = lt.begin();
+	while (it != lt.end())
+	{
+		//cout << (*it)._row << ":" << (*it)._col << endl;
+		cout << it->_row << ":" << it->_col << endl;
+		//cout << it.operator->()->_row << ":" << it.operator->()->_col << endl;
+		++it;
+	}
+	cout << endl;
+
+}
+
 int main()
 {
-	Test4();
+	Test5();
 
 	return 0;
 }

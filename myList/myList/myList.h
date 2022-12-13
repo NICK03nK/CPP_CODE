@@ -20,14 +20,15 @@ namespace myList
 		{}
 	};
 
-	// typedef __list_iterator<T, T&> iterator;
-	// typedef __list_iterator<T, const T&> const_iterator;
+	// 同一个类模板实例化出的两个不同的类型
+	// typedef __list_iterator<T, T&, T*> iterator;
+	// typedef __list_iterator<T, const T&, const T*> const_iterator;
 	// 以上两个是属于不同的类，通过给__list_iterator模板传不同的参数从而实例化出不同的类
-	template<class T, class Ref>
+	template<class T, class Ref, class Ptr>
 	struct __list_iterator
 	{
 		typedef list_node<T> node;
-		typedef __list_iterator<T, Ref> Self;  // 使用typedef将__list_iterator<T, Ref>重命名为Self，便于后续统一处理成员函数的返回值
+		typedef __list_iterator<T, Ref, Ptr> Self;  // 使用typedef将__list_iterator<T, Ref>重命名为Self，便于后续统一处理成员函数的返回值
 		node* _pnode;
 
 		__list_iterator(node* p)
@@ -39,10 +40,22 @@ namespace myList
 			return _pnode->_data;
 		}
 
+		Ptr operator->()
+		{
+			return &_pnode->_data;
+		}
+
 		Self& operator++()
 		{
 			_pnode = _pnode->_next;
 			return *this;
+		}
+
+		Self operator++(int)
+		{
+			Self tmp(*this);
+			_pnode = _pnode->_next;
+			return tmp;
 		}
 
 		Self& operator--()
@@ -51,9 +64,21 @@ namespace myList
 			return *this;
 		}
 
-		bool operator!=(const Self& it)
+		Self operator--(int)
+		{
+			Self tmp(*this);
+			_pnode = _pnode->_prev;
+			return tmp;
+		}
+
+		bool operator!=(const Self& it) const
 		{
 			return _pnode != it._pnode;
+		}
+
+		bool operator==(const Self& it) const
+		{
+			return _pnode == it._pnode;
 		}
 	};
 
@@ -95,8 +120,8 @@ namespace myList
 	{
 	public:
 		typedef list_node<T> node;
-		typedef __list_iterator<T, T&> iterator;
-		typedef __list_iterator<T, const T&> const_iterator;
+		typedef __list_iterator<T, T&, T*> iterator;
+		typedef __list_iterator<T, const T&, const T*> const_iterator;
 		//typedef __list_const_iterator<T> const_iterator;
 
 		void empty_initialize()
