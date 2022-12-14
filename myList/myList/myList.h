@@ -190,7 +190,7 @@ namespace myList
 		list<T>& operator=(list<T> lT)
 		{
 			swap(lT);
-			
+
 			return *this;
 		}
 
