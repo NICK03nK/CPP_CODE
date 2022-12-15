@@ -164,12 +164,53 @@ void Test5()
 		++it;
 	}
 	cout << endl;
+}
 
+// 测试n个value构造list
+void Test6()
+{
+	myList::list<int> li(4, 10);
+
+	for (auto e : li)
+	{
+		cout << e << " ";
+	}
+	cout << endl;
+
+	li.push_back(3);
+
+	for (auto e : li)
+	{
+		cout << e << " ";
+	}
+	cout << endl;
+}
+
+void test(const myList::list<int> li)
+{
+	cout << li.front() << endl;
+	cout << li.back() << endl;
+}
+
+// 测试front()和back()
+void Test7()
+{
+	myList::list<int> li;
+
+	li.push_back(1);
+	li.push_back(2);
+	li.push_back(3);
+	li.push_back(4);
+
+	cout << li.front() << endl;
+	cout << li.back() << endl;
+
+	test(li);
 }
 
 int main()
 {
-	Test5();
+	Test7();
 
 	return 0;
 }

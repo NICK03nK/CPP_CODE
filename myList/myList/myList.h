@@ -28,11 +28,15 @@ namespace myList
 	struct __list_iterator
 	{
 		typedef list_node<T> node;
-		typedef __list_iterator<T, Ref, Ptr> Self;  // 使用typedef将__list_iterator<T, Ref>重命名为Self，便于后续统一处理成员函数的返回值
+		typedef __list_iterator<T, Ref, Ptr> Self;  // 使用typedef将__list_iterator<T, Ref, Ptr>重命名为Self，便于后续统一处理迭代器类型
 		node* _pnode;
 
-		__list_iterator(node* p)
+		__list_iterator(node* p = nullptr)
 			:_pnode(p)
+		{}
+
+		__list_iterator(const Self& lt)
+			:_pnode(lt._pnode)
 		{}
 
 		Ref operator*()
@@ -138,6 +142,16 @@ namespace myList
 			empty_initialize();
 		}
 
+		list(int n, const T& value = T())
+		{
+			empty_initialize();
+
+			while (n--)
+			{
+				push_back(value);
+			}
+		}
+
 		template <class InputIterator>
 		list(InputIterator first, InputIterator last)
 		{
@@ -232,6 +246,34 @@ namespace myList
 			return _size == 0;
 		}
 
+		T& front()
+		{
+			assert(!empty());
+
+			return _head->_next->_data;
+		}
+
+		const T& front() const
+		{
+			assert(!empty());
+
+			return _head->_next->_data;
+		}
+
+		T& back()
+		{
+			assert(!empty());
+
+			return _head->_prev->_data;
+		}
+
+		const T& back() const
+		{
+			assert(!empty());
+
+			return _head->_prev->_data;
+		}
+
 		void push_back(const T& value)
 		{
 			// 传统写法
@@ -246,14 +288,14 @@ namespace myList
 			insert(end(), value);
 		}
 
-		void push_front(const T& value)
-		{
-			insert(begin(), value);
-		}
-
 		void pop_back()
 		{
 			erase(--end());
+		}
+
+		void push_front(const T& value)
+		{
+			insert(begin(), value);
 		}
 
 		void pop_front()
