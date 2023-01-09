@@ -196,9 +196,52 @@ void Test7()
 	cout << endl;
 }
 
+// 测试vector的反向迭代器
+void Test8()
+{
+	myVector::vector<int> v;
+	v.push_back(1);
+	v.push_back(2);
+	v.push_back(3);
+	v.push_back(4);
+	v.push_back(5);
+
+	myVector::vector<int>::reverse_iterator rit = v.rbegin();
+	while (rit != v.rend())
+	{
+		cout << *rit << " ";
+		++rit;
+	}
+	cout << endl;
+}
+
+void testConst(const myVector::vector<int> v)
+{
+	myVector::vector<int>::const_reverse_iterator rit = v.rbegin();
+	while (rit != v.rend())
+	{
+		cout << *rit << " ";
+		++rit;
+	}
+	cout << endl;
+}
+
+// 测试反向迭代器的const版本
+void Test9()
+{
+	myVector::vector<int> v;
+	v.push_back(1);
+	v.push_back(2);
+	v.push_back(3);
+	v.push_back(4);
+	v.push_back(5);
+
+	testConst(v);
+}
+
 int main()
 {
-	Test7();
+	Test9();
 
 	return 0;
 }

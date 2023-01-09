@@ -23,5 +23,8 @@
     <ClInclude Include="myList.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="myIiterator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

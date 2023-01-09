@@ -208,9 +208,52 @@ void Test7()
 	test(li);
 }
 
+// 测试list的反向迭代器
+void Test8()
+{
+	myList::list<int> li;
+
+	li.push_back(1);
+	li.push_back(2);
+	li.push_back(3);
+	li.push_back(4);
+
+	myList::list<int>::reverse_iterator rit = li.rbegin();
+	while (rit != li.rend())
+	{
+		cout << *rit << " ";
+		++rit;
+	}
+	cout << endl;
+}
+
+void testConst(const myList::list<int> li)
+{
+	myList::list<int>::const_reverse_iterator rit = li.rbegin();
+	while (rit != li.rend())
+	{
+		cout << *rit << " ";
+		++rit;
+	}
+	cout << endl;
+}
+
+// 测试反向迭代器的const版本
+void Test9()
+{
+	myList::list<int> li;
+
+	li.push_back(1);
+	li.push_back(2);
+	li.push_back(3);
+	li.push_back(4);
+
+	testConst(li);
+}
+
 int main()
 {
-	Test7();
+	Test9();
 
 	return 0;
 }

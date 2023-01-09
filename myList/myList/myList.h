@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <assert.h>
+#include "myIiterator.h"
 using namespace std;
 
 namespace myList
@@ -128,6 +129,10 @@ namespace myList
 		typedef __list_iterator<T, const T&, const T*> const_iterator;
 		//typedef __list_const_iterator<T> const_iterator;
 
+		// ·´Ïòµü´úÆ÷
+		typedef myIterator::reverse_iterator<iterator, T&, T*> reverse_iterator;
+		typedef myIterator::reverse_iterator<const_iterator, const T&, const T*> const_reverse_iterator;
+
 		void empty_initialize()
 		{
 			_head = new node(T());
@@ -234,6 +239,26 @@ namespace myList
 		const_iterator end() const
 		{
 			return const_iterator(_head);
+		}
+
+		reverse_iterator rbegin()
+		{
+			return reverse_iterator(end());
+		}
+
+		reverse_iterator rend()
+		{
+			return reverse_iterator(begin());
+		}
+
+		const_reverse_iterator rbegin() const
+		{
+			return const_reverse_iterator(end());
+		}
+
+		const_reverse_iterator rend() const
+		{
+			return const_reverse_iterator(begin());
 		}
 
 		size_t size() const

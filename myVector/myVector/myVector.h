@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <assert.h>
+#include "myIiterator.h"
 using namespace std;
 
 namespace myVector
@@ -13,6 +14,10 @@ namespace myVector
 		typedef T* iterator;
 		typedef const T* const_iterator;
 
+		// ·´Ïòµü´úÆ÷
+		typedef myIterator::reverse_iterator<iterator, T&, T*> reverse_iterator;
+		typedef myIterator::reverse_iterator<const_iterator, const T&, const T*> const_reverse_iterator;
+
 		iterator begin()
 		{
 			return _start;
@@ -23,14 +28,34 @@ namespace myVector
 			return _finish;
 		}
 
-		const_iterator cbegin() const
+		const_iterator begin() const
 		{
 			return _start;
 		}
 
-		const_iterator cend() const
+		const_iterator end() const
 		{
 			return _finish;
+		}
+
+		reverse_iterator rbegin()
+		{
+			return reverse_iterator(end());
+		}
+
+		reverse_iterator rend()
+		{
+			return reverse_iterator(begin());
+		}
+
+		const_reverse_iterator rbegin() const
+		{
+			return const_reverse_iterator(end());
+		}
+
+		const_reverse_iterator rend() const
+		{
+			return const_reverse_iterator(begin());
 		}
 
 		vector()
@@ -84,7 +109,7 @@ namespace myVector
 			, _finish(nullptr)
 			, _endOfStorage(nullptr)
 		{
-			vector<T> tmp(vT.cbegin(), vT.cend());
+			vector<T> tmp(vT.begin(), vT.end());
 			swap(tmp);
 		}
 
