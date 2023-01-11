@@ -1,7 +1,4 @@
 #pragma once
-#include <iostream>
-#include <vector>
-using namespace std;
 
 namespace myPriority_queue
 {
@@ -22,6 +19,26 @@ namespace myPriority_queue
 		bool operator()(const T& x, const T& y)
 		{
 			return x > y;
+		}
+	};
+
+	template<>
+	class less<Date*>
+	{
+	public:
+		bool operator()(Date* const & x, Date* const & y)
+		{
+			return *x < *y;
+		}
+	};
+
+	template<>
+	class greater<Date*>
+	{
+	public:
+		bool operator()(Date* const& x, Date* const& y)
+		{
+			return *x > *y;
 		}
 	};
 

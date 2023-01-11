@@ -1,4 +1,6 @@
-#include "myPriority_queue.h"
+#include <iostream>
+#include <vector>
+using namespace std;
 
 class Date
 {
@@ -31,23 +33,25 @@ private:
 	int _day;
 };
 
-class PDLess
-{
-public:
-	bool operator()(const Date* d1, const Date* d2)
-	{
-		return *d1 < *d2;
-	}
-};
+#include "myPriority_queue.h"
 
-class PDGreater
-{
-public:
-	bool operator()(const Date* d1, const Date* d2)
-	{
-		return *d1 > *d2;
-	}
-};
+//class PDLess
+//{
+//public:
+//	bool operator()(const Date* d1, const Date* d2)
+//	{
+//		return *d1 < *d2;
+//	}
+//};
+//
+//class PDGreater
+//{
+//public:
+//	bool operator()(const Date* d1, const Date* d2)
+//	{
+//		return *d1 > *d2;
+//	}
+//};
 
 void TestPriorityQueue()
 {
@@ -68,7 +72,7 @@ void TestPriorityQueue()
 	// 若此处不使用仿函数特殊处理Date*的情况，则在建堆的时候默认按照地址来比较大小
 	// 因为每次new出来的地址都是随机的，所以按照地址来比较没有意义，无法达到预期要
 	// 所以需要使用仿函数来特殊处理
-	myPriority_queue::priority_queue<Date*, vector<Date*>, PDLess> q3;
+	/*myPriority_queue::priority_queue<Date*, vector<Date*>, PDLess> q3;
 	q3.push(new Date(2018, 10, 29));
 	q3.push(new Date(2018, 10, 28));
 	q3.push(new Date(2018, 10, 30));
@@ -79,33 +83,48 @@ void TestPriorityQueue()
 	q4.push(new Date(2018, 10, 29));
 	q4.push(new Date(2018, 10, 28));
 	q4.push(new Date(2018, 10, 30));
+	cout << *(q4.top()) << endl;*/
+
+
+	// 使用模板特化解决上述问题
+	myPriority_queue::priority_queue<Date*> q3;
+	q3.push(new Date(2018, 10, 29));
+	q3.push(new Date(2018, 10, 28));
+	q3.push(new Date(2018, 10, 30));
+	cout << *(q3.top()) << endl;
+
+
+	myPriority_queue::priority_queue<Date*, vector<Date*>, myPriority_queue::greater<Date*>> q4;
+	q4.push(new Date(2018, 10, 29));
+	q4.push(new Date(2018, 10, 28));
+	q4.push(new Date(2018, 10, 30));
 	cout << *(q4.top()) << endl;
+}
+
+int main()
+{
+	TestPriorityQueue();
+
+	return 0;
 }
 
 //int main()
 //{
-//	TestPriorityQueue();
+//	//myPriority_queue::priority_queue<int> pq;  // 建大堆 --> 数值大的优先级高
+//	myPriority_queue::priority_queue<int, vector<int>, greater<int>> pq;  // 建小堆 --> 数值小的优先级高
+//
+//	pq.push(1);
+//	pq.push(3);
+//	pq.push(10);
+//	pq.push(0);
+//	pq.push(6);
+//
+//	while (!pq.empty())
+//	{
+//		cout << pq.top() << " ";
+//		pq.pop();
+//	}
+//	cout << endl;
 //
 //	return 0;
 //}
-
-int main()
-{
-	//myPriority_queue::priority_queue<int> pq;  // 建大堆 --> 数值大的优先级高
-	myPriority_queue::priority_queue<int, vector<int>, greater<int>> pq;  // 建小堆 --> 数值小的优先级高
-
-	pq.push(1);
-	pq.push(3);
-	pq.push(10);
-	pq.push(0);
-	pq.push(6);
-
-	while (!pq.empty())
-	{
-		cout << pq.top() << " ";
-		pq.pop();
-	}
-	cout << endl;
-
-	return 0;
-}
